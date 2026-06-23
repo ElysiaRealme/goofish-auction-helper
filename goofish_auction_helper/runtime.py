@@ -84,8 +84,13 @@ def run_text(cmd: list[str], *, timeout: float = 8.0) -> str:
 
 def resolve_frida_exe(cli_value: str | None = None, config: dict | None = None) -> str:
     env = _env_config(config)
+    configured = _first_value(cli_value, os.environ.get("GOOFISH_FRIDA"), env.get("frida_exe"))
+    if configured:
+        return configured
     local = ROOT / ".venv" / ("Scripts" if os.name == "nt" else "bin") / ("frida.exe" if os.name == "nt" else "frida")
-    return _first_value(cli_value, os.environ.get("GOOFISH_FRIDA"), env.get("frida_exe"), local) or "frida"
+    if local.exists():
+        return str(local)
+    return shutil.which("frida") or "frida"
 
 
 def resolve_adb(cli_value: str | None = None, config: dict | None = None) -> str:
