@@ -11,8 +11,12 @@ from datetime import datetime
 from pathlib import Path
 
 from goofish_auction_helper.runtime import (
+    CONFIG_EXAMPLE_PATH,
+    CONFIG_PATH,
+    ROOT,
     config_source_label,
     host_frida_version,
+    is_packaged,
     load_config,
     resolve_adb,
     resolve_device,
@@ -20,10 +24,6 @@ from goofish_auction_helper.runtime import (
     resolve_frida_server_bin,
     run_text,
 )
-
-ROOT = Path(__file__).resolve().parent.parent
-CONFIG_PATH = ROOT / "config.toml"
-CONFIG_EXAMPLE_PATH = ROOT / "config.example.toml"
 
 COLORS = {
     "reset": "\033[0m",
@@ -147,7 +147,7 @@ def confirm_exact(prompt: str, word: str) -> bool:
 
 def run_command(args: list[str]) -> None:
     clear()
-    cmd = [sys.executable, str(ROOT / "main.py"), *args]
+    cmd = [sys.executable, *args] if is_packaged() else [sys.executable, str(ROOT / "main.py"), *args]
     log("INFO", "即将执行:")
     print(" ".join(f'"{part}"' if " " in part else part for part in cmd))
     print()

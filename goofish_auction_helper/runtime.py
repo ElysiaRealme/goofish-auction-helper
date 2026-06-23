@@ -10,7 +10,17 @@ import sys
 import tomllib
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+def is_packaged() -> bool:
+    return bool(getattr(sys, "frozen", False) or "__compiled__" in globals())
+
+
+def runtime_root() -> Path:
+    if is_packaged():
+        return Path(sys.executable).resolve().parent
+    return Path(__file__).resolve().parent.parent
+
+
+ROOT = runtime_root()
 CONFIG_PATH = ROOT / "config.toml"
 CONFIG_EXAMPLE_PATH = ROOT / "config.example.toml"
 PACKAGE = "com.taobao.idlefish"
