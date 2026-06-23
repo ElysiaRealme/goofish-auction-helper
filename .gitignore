@@ -5,6 +5,14 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 
+# Local build output and Nuitka cache
+.build/
+build/
+dist/
+*.build/
+*.dist/
+*.onefile-build/
+
 # Local user configuration and secrets
 config.toml
 .env
