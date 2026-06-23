@@ -60,6 +60,17 @@ The Goofish auction page continuously polls `mtop.idle.vendue.itemdetail.bid.get
 
 Device-side frida-server binaries are not committed. Use `uv run frida --version` and `adb shell getprop ro.product.cpu.abi`, then download the matching version and architecture from [Frida Releases](https://github.com/frida/frida/releases). See [FRIDA_SERVER.md](FRIDA_SERVER.md) for details.
 
+## Prebuilt Binaries
+
+This project is TUI-first. GitHub Releases provide two Windows onefile executables; most users should download the TUI build first:
+
+| File | Role | Best For | Launch |
+|---|---|---|---|
+| `goofish-auction-helper-tui-v0.1.0-windows-amd64.exe` | Recommended build / primary entry point | Most users who want the linear flow for configuration, environment checks, frida-server startup, dry-run, and simulate/live runs | Double-click it, or run it without arguments from a terminal, to open the arrow-key menu |
+| `goofish-auction-helper-cli-v0.1.0-windows-amd64.exe` | Advanced command-line build | Users who already know the flags, need scripting, or want direct `fire` / `sniper` / `frida` invocation | Run from a terminal with a subcommand and flags, for example `fire --dry-run` |
+
+Both executables only package this project's Python logic. They do not include adb, frida-server, the Goofish APK, or account state. Real operation still requires MuMu/Android, a working adb, a host-side `frida` CLI, and a version-matched device-side frida-server running as root.
+
 ## Installation
 
 ```bat
@@ -140,7 +151,7 @@ Safety and target-selection parameters:
 
 ## Usage
 
-Start with the TUI:
+Start with the TUI. For the prebuilt TUI executable, run the exe directly. From source:
 
 ```bat
 uv run python main.py tui
@@ -181,6 +192,7 @@ uv run python main.py sniper --live --max-price <max_price_in_fen>
 | Path | Purpose |
 |---|---|
 | `main.py` | Primary entry point for `tui`, `fire`, `sniper`, and `frida` |
+| `tui_main.py` | TUI onefile release entry point; no arguments opens the TUI, arguments fall back to CLI dispatch |
 | `goofish_auction_helper/cli.py` | CLI dispatcher |
 | `goofish_auction_helper/tui.py` | Arrow-key TUI |
 | `goofish_auction_helper/fire.py` | One-shot bid fire / read-only check core with embedded Frida JS |
@@ -205,7 +217,7 @@ uv run python main.py sniper --live --max-price <max_price_in_fen>
 
 ```bat
 uv lock --check
-uv run python -B -m compileall -q main.py goofish_auction_helper
+uv run python -B -m compileall -q main.py tui_main.py goofish_auction_helper
 ```
 
 Real runtime validation should start with `uv run python main.py fire --dry-run`. Only consider live commands after `currentPrice` is visible.

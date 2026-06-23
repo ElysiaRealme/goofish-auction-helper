@@ -60,6 +60,17 @@
 
 frida-server 二进制不进入仓库。按 `uv run frida --version` 和 `adb shell getprop ro.product.cpu.abi` 到 [Frida Releases](https://github.com/frida/frida/releases) 下载匹配版本与架构，解压后推送到设备端。更多步骤见 [FRIDA_SERVER.md](FRIDA_SERVER.md)。
 
+## 预编译版本
+
+本项目以 TUI 为主轴。GitHub Release 提供两个 Windows onefile exe，推荐优先下载 TUI 版本:
+
+| 文件 | 定位 | 适合场景 | 启动方式 |
+|---|---|---|---|
+| `goofish-auction-helper-tui-v0.1.0-windows-amd64.exe` | 推荐版本 / 主入口 | 大多数用户；需要按线性流程完成配置、环境检查、启动 frida-server、dry-run、simulate/live | 双击或命令行无参数运行，默认进入方向键菜单 |
+| `goofish-auction-helper-cli-v0.1.0-windows-amd64.exe` | 高级命令行版本 | 熟悉参数、需要脚本化或只想直接调用 `fire` / `sniper` / `frida` 的用户 | 必须在命令行中追加子命令和参数，例如 `fire --dry-run` |
+
+两个 exe 都只是封装本项目的 Python 逻辑，不包含 adb、frida-server、闲鱼 APK 或账号态。真实运行仍需要 MuMu/Android 设备、可用 adb、host 端 `frida` CLI，以及设备端 root 运行且版本匹配的 frida-server。
+
 ## 安装
 
 ```bat
@@ -140,7 +151,7 @@ copy config.example.toml config.toml
 
 ## 使用
 
-推荐从 TUI 开始:
+推荐从 TUI 开始。预编译 TUI 版直接运行 exe 即可；源码运行使用:
 
 ```bat
 uv run python main.py tui
@@ -181,6 +192,7 @@ uv run python main.py sniper --live --max-price <max_price_in_fen>
 | 路径 | 说明 |
 |---|---|
 | `main.py` | 唯一主入口，分发到 `tui`、`fire`、`sniper`、`frida` |
+| `tui_main.py` | TUI onefile 发布入口；无参数打开 TUI，有参数时回退到 CLI 分发 |
 | `goofish_auction_helper/cli.py` | CLI 分发器 |
 | `goofish_auction_helper/tui.py` | 方向键 TUI |
 | `goofish_auction_helper/fire.py` | 单次出价/只读检查核心逻辑，内嵌 Frida JS |
@@ -205,7 +217,7 @@ uv run python main.py sniper --live --max-price <max_price_in_fen>
 
 ```bat
 uv lock --check
-uv run python -B -m compileall -q main.py goofish_auction_helper
+uv run python -B -m compileall -q main.py tui_main.py goofish_auction_helper
 ```
 
 真实链路验证应从 `uv run python main.py fire --dry-run` 开始，确认能读到 `currentPrice` 后再考虑 live 命令。
