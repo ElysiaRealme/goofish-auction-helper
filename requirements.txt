@@ -1,0 +1,3 @@
+# Host dependencies. frida must match the device-side frida-server version.
+frida==17.13.0
+frida-tools==14.10.2

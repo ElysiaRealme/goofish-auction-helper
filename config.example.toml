@@ -1,0 +1,41 @@
+# Safe example configuration for Goofish Frida auction tooling.
+# Copy this file to config.toml and edit local values before running.
+# Amounts are integers in cents/fen, the same scale returned by currentPrice.
+
+[env]
+# Optional. If omitted, the tools use GOOFISH_ADB or PATH discovery.
+# adb = "adb"
+
+# Optional. If omitted, the tools use GOOFISH_DEVICE or the only connected adb device.
+# Common emulator examples: 127.0.0.1:7555, 127.0.0.1:5555, 127.0.0.1:21503.
+# device = "127.0.0.1:7555"
+
+# Optional. If omitted, the tools infer /data/local/tmp/frida-server-<host-frida-version>-<device-arch>.
+# Make sure this path matches the binary you pushed to the device and started as root.
+# frida_server_bin = "/data/local/tmp/frida-server-<version>-<arch>"
+
+# Optional. If omitted, the tools use the local uv virtualenv frida CLI.
+# frida_exe = ".venv\\Scripts\\frida.exe"
+
+# Trigger when remaining time <= trigger_sec + random[-jitter_sec, +jitter_sec].
+trigger_sec = 90
+jitter_sec = 5
+
+# Bid amount strategy. aggression=1 uses the server-provided nextBidPrice.
+aggression = 1
+# step = 100
+
+# Retry / timing controls.
+max_retries = 3
+cooldown_ms = 3000
+outcome_ms = 4000
+
+# Safe default: simulate only. Do not commit a live config.toml.
+live = false
+# max_price is required for --live. Example: 4000000 = CNY 40000.
+# max_price = 4000000
+
+# Optional fixed auction ids. Leave commented to use the currently open auction page.
+# auction = "76557299"
+# item = "1059375760839"
+# vendue = "76557299"

@@ -1,0 +1,12 @@
+[project]
+name = "goofish-auction-helper"
+version = "0.1.0"
+description = "Frida-assisted Goofish auction bid fire and sniper tooling."
+requires-python = ">=3.11"
+dependencies = [
+    "frida==17.13.0",
+    "frida-tools==14.10.2",
+]
+
+[tool.uv]
+package = false

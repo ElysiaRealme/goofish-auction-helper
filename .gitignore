@@ -1,0 +1,35 @@
+# Python/runtime state
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# Local user configuration and secrets
+config.toml
+.env
+*.local.*
+
+# Runtime captures and logs
+logs/
+*.log
+*.jsonl
+*.har
+
+# Local-only archive created during repository cleanup
+archive_data/
+local_artifacts/
+
+# Device-side Frida server binaries; download from Frida releases instead
+frida-server/frida-server-*
+frida-server/*.xz
+
+# Large/generated media and temporary files
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.zip
+*.7z
+*.rar
+*.tmp

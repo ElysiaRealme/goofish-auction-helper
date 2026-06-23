@@ -1,0 +1,9 @@
+name: goofish-auction-helper
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.11
+  - pip
+  - pip:
+      - frida==17.13.0
+      - frida-tools==14.10.2
